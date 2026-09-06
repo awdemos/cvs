@@ -585,7 +585,7 @@ export GLOO_SOCKET_IFNAME={self.tc_dict['gloo_socket_ifname']}
         for i in range(0, self.training_steps):
             training_results_dict[i] = {}
 
-            pattern = f'completed step:\s+{i},\s+seconds:\s+([0-9\.]+),\s+TFLOP\/s\/device:\s+([0-9\.]+),\s+Tokens\/s\/device:\s+([0-9\.]+),\s+total_weights:\s+([0-9\\.]+),\s+loss:\s+([0-9\.]+|nan|inf|-inf)'
+            pattern = f'completed step:\\s+{i},\\s+seconds:\\s+([0-9\\.]+),\\s+TFLOP\\/s\\/device:\\s+([0-9\\.]+),\\s+Tokens\\/s\\/device:\\s+([0-9\\.]+),\\s+total_weights:\\s+([0-9\\.]+),\\s+loss:\\s+([0-9\\.]+|nan|inf|-inf)'
             match = re.search(pattern, output, re.I)
 
             # Guard against missing or malformed lines to avoid AttributeError on match.group(...)
@@ -663,7 +663,7 @@ export GLOO_SOCKET_IFNAME={self.tc_dict['gloo_socket_ifname']}
         return training_pass
 
     def poll_for_training_completion(self, waittime_between_iters=60, total_timeout=3600, require_all_nodes=True):
-        """
+        r"""
         Periodically poll training logs to detect completion or failure, with robust checks and a hard timeout.
 
         Improvements implemented (based on previous suggestions):
@@ -801,7 +801,7 @@ export GLOO_SOCKET_IFNAME={self.tc_dict['gloo_socket_ifname']}
             # Fallback: check if all training steps completed successfully
             # This handles the known race condition where PJRT cleanup runs after coordination service exits
             final_step = self.training_steps - 1
-            if re.search(f'completed step:\s+{final_step},', out_dict[last_node], re.I):
+            if re.search(rf'completed step:\s+{final_step},', out_dict[last_node], re.I):
                 log.info(
                     f"Training completed all {self.training_steps} steps successfully. Shutdown message missing but acceptable due to coordination service cleanup race condition."
                 )

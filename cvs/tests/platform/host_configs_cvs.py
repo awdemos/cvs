@@ -154,7 +154,7 @@ def test_check_os_release(
     for node in out_dict.keys():
         # If expected version is not present, extract the actual version and fail
         if not re.search(f'{os_version}', out_dict[node], re.I):
-            match = re.search('VERSION="(([0-9\.\-\_A-Z]+)\s+)', out_dict[node], re.I)
+            match = re.search(r'VERSION="(([0-9\.\-\_A-Z]+)\s+)', out_dict[node], re.I)
             actual_ver = match.group(1)
             fail_test(f'Installed OS Version {actual_ver} not matching expected version {os_version} on node {node}')
     # Consolidate and record the test result
@@ -189,7 +189,7 @@ def test_check_kernel_version(phdl, config_dict):
     for node in out_dict.keys():
         # If expected version is not present, extract the actual version and fail
         if not re.search(f'{kernel_version}', out_dict[node], re.I):
-            match = re.search('([0-9\.\-\_]+generic)', out_dict[node], re.I)
+            match = re.search(r'([0-9\.\-\_]+generic)', out_dict[node], re.I)
             actual_ver = match.group(1)
             fail_test(
                 f'Installed Kernel Version {actual_ver} not matching expected version {kernel_version} on node {node}'
@@ -223,7 +223,7 @@ def test_check_bios_version(phdl, config_dict):
     out_dict = phdl.exec('sudo dmidecode -s bios-version')
     for node in out_dict.keys():
         if not re.search(f'{bios_version}', out_dict[node], re.I):
-            match = re.search('([a-z0-9\_\.\-]+)', out_dict[node], re.I)
+            match = re.search(r'([a-z0-9\_\.\-]+)', out_dict[node], re.I)
             act_bios_ver = match.group(1)
             fail_test(
                 f'Installed BIOS Version {act_bios_ver} not matching expected version {bios_version} on node {node}'
@@ -259,7 +259,7 @@ def test_check_rocm_version(phdl, config_dict):
     out_dict = phdl.exec('amd-smi version')
     for node in out_dict.keys():
         if not re.search(f'{rocm_version}', out_dict[node], re.I):
-            match = re.search('ROCm version:\s+([0-9\.]+)', out_dict[node], re.I)
+            match = re.search(r'ROCm version:\s+([0-9\.]+)', out_dict[node], re.I)
             actual_rocm_version = match.group(1)
             fail_test(
                 f'Installed rocm version {actual_rocm_version} not matching expected version {rocm_version} on node {node}'
@@ -423,8 +423,8 @@ def test_check_online_memory(phdl, config_dict):
     online_mem = config_dict['online_memory']
     out_dict = phdl.exec('lsmem')
     for node in out_dict.keys():
-        if not re.search(f'Total online memory:\s+{online_mem}', out_dict[node], re.I):
-            match = re.search('Total online memory:\s+([0-9\.A-Za-z]+)', out_dict[node])
+        if not re.search(rf'Total online memory:\s+{online_mem}', out_dict[node], re.I):
+            match = re.search(r'Total online memory:\s+([0-9\.A-Za-z]+)', out_dict[node])
             actual_mem = match.group(1)
             fail_test(f'Total online memory {actual_mem} not matching expected online mem {online_mem} on node {node}')
     update_test_result()
@@ -456,7 +456,7 @@ def test_check_pci_accelerators(phdl, config_dict):
     gpu_count = config_dict['gpu_count']
     out_dict = phdl.exec('lspci | grep "accelerators" --color=never')
     for node in out_dict.keys():
-        match_list = re.findall('accelerators:\s+Advanced', out_dict[node], re.I)
+        match_list = re.findall(r'accelerators:\s+Advanced', out_dict[node], re.I)
         actual_gpu_count = len(match_list)
         if int(gpu_count) != actual_gpu_count:
             fail_test(

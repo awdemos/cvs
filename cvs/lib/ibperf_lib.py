@@ -151,7 +151,7 @@ def get_ib_lat_numb(phdl, msg_size, cmd):
         log.info(f'starting iteration {i} to collect numbers')
         out_dict = phdl.exec(cmd)
         for node in out_dict.keys():
-            pattern = "{}[\t\s]+[0-9]+[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)[\t\s]+([0-9\.]+)".format(
+            pattern = "{}[\t\\s]+[0-9]+[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)[\t\\s]+([0-9\\.]+)".format(
                 msg_size
             )
             if re.search(pattern, out_dict[node]):
