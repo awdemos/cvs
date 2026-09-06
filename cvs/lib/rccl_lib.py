@@ -342,14 +342,14 @@ def scan_rccl_logs(output):
         log.warning('#============#')
         log.warning('%s', warn_list)
         log.warning('#============#')
-    if not re.search('#\sAvg bus bandwidth', output):
+    if not re.search(r'#\sAvg bus bandwidth', output):
         fail_test('RCCL test did not complete successfully, no bandwidth numbers printed - pls check')
 
 
 # Not using the avg bus bandwidth verification currently ..
 def check_avg_bus_bw(output, exp_res_dict):
-    if re.search('#\sAvg bus bandwidth\s+:\s+[0-9\.]+', output, re.I):
-        match = re.search('#\sAvg bus bandwidth\s+:\s+([0-9\.]+)', output, re.I)
+    if re.search(r'#\sAvg bus bandwidth\s+:\s+[0-9\.]+', output, re.I):
+        match = re.search(r'#\sAvg bus bandwidth\s+:\s+([0-9\.]+)', output, re.I)
         actual_bw = float(match.group(1))
         if actual_bw < float(exp_res_dict['avg_bus_bw']):
             fail_test(f"Actual Avg Bus BW {actual_bw} is less than the expected Avg BW {exp_res_dict['avg_bus_bw']}")

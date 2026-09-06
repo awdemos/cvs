@@ -523,7 +523,7 @@ class MegatronLlamaTrainingJob:
         cmd_list = []
         for i in range(0, int(self.nnodes)):
             result_training_log = f'{self.log_dir}/megatron-logs/out-node{i}/training.log'
-            cmd = f'''docker exec {self.container_name} /bin/bash -c 'sed -i  "/^TRAIN_LOG=/c\TRAIN_LOG={result_training_log}" {self.training_script}' '''
+            cmd = rf'''docker exec {self.container_name} /bin/bash -c 'sed -i  "/^TRAIN_LOG=/c\TRAIN_LOG={result_training_log}" {self.training_script}' '''
             cmd_list.append(cmd)
         self.phdl.exec_cmd_list(cmd_list)
 

@@ -544,7 +544,7 @@ def get_nic_ethtool_stats_dict(phdl, vendor=None):
         cmd_dict[i] = []
         for node in node_list:
             intf_nam = eth_dev_dict[node][i]
-            cmd_dict[i].append(f'sudo ethtool -S {intf_nam} | grep -v "\[" --color=never')
+            cmd_dict[i].append(rf'sudo ethtool -S {intf_nam} | grep -v "\[" --color=never')
 
     # Execute each batch of commands and parse results into stats_dict
     for i in range(0, no_of_nics):
@@ -787,7 +787,7 @@ def get_gpu_nic_mapping_dict(
         nic_bus_dict[node] = []
         for eth_dev in lshw_dict[node].keys():
             nic_pci = lshw_dict[node][eth_dev]['pci_bus']
-            match = re.search('[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', nic_pci, re.I)
+            match = re.search(r'[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', nic_pci, re.I)
             nic_bus_no = match.group(1)
             nic_bus_dict[node].append(nic_bus_no)
 
@@ -797,7 +797,7 @@ def get_gpu_nic_mapping_dict(
             gpu_nic_dict[node][card] = {}
             gpu_bdf = gpu_pcie_dict[node][card]['PCI Bus']
             gpu_nic_dict[node][card]['gpu_bdf'] = gpu_bdf
-            match = re.search('[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', gpu_bdf, re.I)
+            match = re.search(r'[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', gpu_bdf, re.I)
             bus_no = match.group(1)
 
             # find nearest nic bus no.
@@ -811,7 +811,7 @@ def get_gpu_nic_mapping_dict(
             log.info(f'nearest_nic_bus_no = {nearest_nic_bus_no}')
             for eth_dev in lshw_dict[node].keys():
                 match = re.search(
-                    '[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', lshw_dict[node][eth_dev]['pci_bus'], re.I
+                    r'[0-9a-f]+\:([0-9a-f]+)\:[0-9a-f]+\.[0-9a-f]', lshw_dict[node][eth_dev]['pci_bus'], re.I
                 )
                 lshw_bus_no = match.group(1)
                 if hex(int(nearest_nic_bus_no, 16)) == hex(int(lshw_bus_no, 16)):

@@ -212,7 +212,7 @@ class MoriBenchmark:
                     /usr/lib/x86_64-linux-gnu/libibverbs/libbnxt_re-rdmav34.so;" '
             pout_dict = self.phdl.exec(cmd)
             for node in pout_dict.keys():
-                if not re.search('hca_id:\s+bnxt_', pout_dict[node], re.I):
+                if not re.search(r'hca_id:\s+bnxt_', pout_dict[node], re.I):
                     log.info("%s", pout_dict[node])
 
     def install_packages(
@@ -262,7 +262,7 @@ class MoriBenchmark:
         out_dict = self.phdl.exec(cmd)
         exp_res_dict = self.expected_results_dict['ibgda_write']
         for node in out_dict.keys():
-            if not re.search('Index\s+Size', out_dict[node], re.I):
+            if not re.search(r'Index\s+Size', out_dict[node], re.I):
                 fail_test('ERROR - dist_write did not complete properly - results not seen')
             else:
                 meta_data, results = parse_ibgda_output(out_dict[node])

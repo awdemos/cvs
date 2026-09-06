@@ -132,7 +132,7 @@ def parse_tb_a2a_bw(out_dict, exp_dict):
 def parse_tb_p2p_bw(out_dict, exp_dict):
     for node in out_dict.keys():
         match = re.search(
-            'Averages\s+\(During\s+UniDir\):\s+[0-9\.]+\s+[0-9\.]+\s+[0-9\.]+\s+([0-9\.]+)', out_dict[node], re.I
+            r'Averages\s+\(During\s+UniDir\):\s+[0-9\.]+\s+[0-9\.]+\s+[0-9\.]+\s+([0-9\.]+)', out_dict[node], re.I
         )
         avg_unidir = float(match.group(1))
         if float(avg_unidir) < float(exp_dict['avg_gpu_to_gpu_p2p_unidir_bw']):
@@ -140,7 +140,7 @@ def parse_tb_p2p_bw(out_dict, exp_dict):
                 f"Actual Avg UniDir GPU to GPU bandwidth {avg_unidir} is less than expected {exp_dict['avg_gpu_to_gpu_p2p_unidir_bw']} on node {node}"
             )
         match = re.search(
-            'Averages\s+\(During\s+BiDir\):\s+[0-9\.]+\s+[0-9\.]+\s+[0-9\.]+\s+([0-9\.]+)', out_dict[node], re.I
+            r'Averages\s+\(During\s+BiDir\):\s+[0-9\.]+\s+[0-9\.]+\s+[0-9\.]+\s+([0-9\.]+)', out_dict[node], re.I
         )
         avg_bidir = float(match.group(1))
         if float(avg_bidir) < float(exp_dict['avg_gpu_to_gpu_p2p_bidir_bw']):

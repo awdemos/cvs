@@ -117,14 +117,14 @@ def get_log_results(phdl, out_dict):
     err_cmd_list = []
     # Check results.json
     for node in out_dict.keys():
-        match = re.search('Log directory:\s+([a-z0-9\/\-\_]+)', out_dict[node], re.I)
+        match = re.search(r'Log directory:\s+([a-z0-9\/\-\_]+)', out_dict[node], re.I)
         log_dir = match.group(1)
         res_cmd_list.append(f'sudo cat {log_dir}/results.json')
         jrl_cmd_list.append(f'sudo cat {log_dir}/journal.log')
         err_cmd_list.append(f'sudo cat {log_dir}/error.json')
     res_dict = phdl.exec_cmd_list(res_cmd_list)
     for node in res_dict.keys():
-        pattern = '"total_failed":\s+0,'
+        pattern = r'"total_failed":\s+0,'
         if not re.search(pattern, res_dict[node], re.I):
             fail_test(f'Total failed tests in results.json is not zero on node {node}')
             log.info('Dumping journal log from all nodes for reference')
